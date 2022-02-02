@@ -9,5 +9,7 @@ ListenPort = {{ wg_port }}
 PreUp = sysctl -w net.ipv4.ip_forward=1
 
 #replace eth0 with the interface open to the internet (e.g might be wlan0 if wifi)
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {{ interface }} -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o {{ interface }} -j MASQUERADE
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o {{ interface }}  -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o {{ interface }}  -j MASQUERADE
+
+[Peer]
